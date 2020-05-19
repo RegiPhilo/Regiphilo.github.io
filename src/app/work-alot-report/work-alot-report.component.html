@@ -1,0 +1,238 @@
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <br>
+            <form class="form-inline">
+
+                <div>
+                    <label for="report">Select the Report to view:</label>&nbsp;&nbsp;&nbsp;
+                    <select id="report" class="form-control" name="report" [(ngModel)]="data.report">
+                        <option value="" (click)="selectReport($event)" selected="selected">None</option>
+                        <option value="staffEntry" (click)="selectReport($event)">Staff Entry Report</option>
+                        <option value="WorkAllotment" (click)="selectReport($event)">Work Allotment Report</option>
+                        <option value="Remuneration" (click)="selectReport($event)">Remuneration Report</option>
+                    </select>&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div *ngIf="data.report==='staffEntry' || data.report==='WorkAllotment'">
+                    <label for="StaffName">Staff Name:</label>&nbsp;&nbsp;&nbsp;
+                    <select id="staffName" class="form-control" name="staffName" [(ngModel)]="data.staffName">
+                        <option value="" selected="selected">None</option>
+                        <option *ngFor="let staffName of wrkAltInt.staffList">{{staffName}}</option>
+                    </select>&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div *ngIf="data.report==='Remuneration'">
+                    <label for="filters">Filter By :</label>&nbsp;&nbsp;&nbsp;
+                    <select id="remuFilter" class="form-control" name="remuFilter" [(ngModel)]="data.remuFilter">
+                        <option value="pymtStatus" selected="selected">Payment Status</option>
+                        <option value="others">Other Fields</option>                                  
+                    </select>&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div *ngIf="data.report==='Remuneration' && data.remuFilter==='pymtStatus'">
+                    <label for="pymtStatus">Payment Status:</label>&nbsp;&nbsp;&nbsp;
+                    <select id="pymtStatus" class="form-control" name="pymtStatus" [(ngModel)]="data.pymtStatus">
+                        <option value="" selected="selected">None</option>
+                        <option value="Fully Paid" >Fully Paid</option>
+                        <option value="Partially Paid">Partially Paid</option>
+                        <option value="Nil Paid">Nil Paid</option>
+                        <option value="NilPart Paid">Nil & Partially Paid</option>          
+                    </select>&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div *ngIf="data.report==='Remuneration'  && data.remuFilter==='pymtStatus'
+                 && (data.pymtStatus==='Fully Paid' || data.pymtStatus==='Partially Paid')">
+                    <label for="StaffSub">Staff and Subject Name:</label>&nbsp;&nbsp;&nbsp;
+                    <select id="staffsubj" class="form-control" name="staffsubj" [(ngModel)]="data.staffSubj">
+                        <option value="" selected="selected">None</option>
+                        <option *ngFor="let staffsubj of staffSubList">{{staffsubj}}</option>
+                    </select>&nbsp;&nbsp;&nbsp;
+                </div>
+                <div *ngIf="data.report==='Remuneration'  &&((data.remuFilter==='pymtStatus'
+                && (data.pymtStatus==='Nil Paid' || data.pymtStatus==='NilPart Paid'))
+                || (data.remuFilter==='others'))">
+                    <label for="StaffName">Staff Name:</label>&nbsp;&nbsp;&nbsp;
+                    <select id="staffName" class="form-control" name="staffName" [(ngModel)]="data.staffName">
+                        <option value="" selected="selected">None</option>
+                        <option *ngFor="let staffName of wrkAltInt.staffList">{{staffName}}</option>
+                    </select>&nbsp;&nbsp;&nbsp;
+                </div>
+                
+                <div *ngIf="data.report==='Remuneration'  &&((data.remuFilter==='pymtStatus'
+                && (data.pymtStatus==='Nil Paid' || data.pymtStatus==='NilPart Paid'))
+                || (data.remuFilter==='others'))">
+                    <label for="subject">Subject:</label>&nbsp;&nbsp;&nbsp;
+                    <select id="subject" class="form-control" name="subject" [(ngModel)]="data.subject">
+                        <option value="" selected="selected">None</option>
+                        <option *ngFor="let subject of wrkAltInt.subjectList">{{subject}}</option>
+                    </select>&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div *ngIf="data.report==='staffEntry' || data.report==='WorkAllotment' || 
+                (data.report==='Remuneration' && data.remuFilter==='others')">
+                    <label for="standard">Standard:</label>&nbsp;&nbsp;&nbsp;
+                    <select id="standard" class="form-control" name="standard" [(ngModel)]="data.standard">
+                        <option value="" selected="selected">None</option>
+                        <option *ngFor="let standard of wrkAltInt.stdList">{{standard}}</option>
+                    </select>&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div *ngIf="data.report==='staffEntry' || data.report==='WorkAllotment'">
+                    <label for="subject">Subject:</label>&nbsp;&nbsp;&nbsp;
+                    <select id="subject" class="form-control" name="subject" [(ngModel)]="data.subject">
+                        <option value="" selected="selected">None</option>
+                        <option *ngFor="let subject of wrkAltInt.subjectList">{{subject}}</option>
+                    </select>&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div *ngIf="data.report==='WorkAllotment'">
+                    <label for="workStatus">Work Allotment Status:</label>&nbsp;&nbsp;&nbsp;
+                    <select id="workStatus" class="form-control" name="workStatus" [(ngModel)]="data.taskStatus">
+                        <option value="" selected="selected">None</option>
+                        <option value="NotStarted">Not Yet Started</option>
+                        <option value="InProgress">InProgress</option>
+                        <option value="Completed">Completed</option>
+                    </select>&nbsp;&nbsp;&nbsp;
+                </div>
+
+               
+               <button type="submit" class="btn btn-primary" (click)="viewReport()">View Report</button>
+                &nbsp;&nbsp;&nbsp;
+                <button type="submit" class="btn btn-primary" (click)="clearSelection()">Clear Inputs</button>
+                &nbsp;&nbsp;&nbsp;
+               
+</form>
+<br>
+
+        </div>
+    </div>
+
+   
+    <div class="list" *ngIf="data.report==='staffEntry'">
+        <table class="table table-bordered table-dark">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Standard</th>
+            <th scope="col">Subject</th>
+            <th scope="col">Staff Name</th>
+            <th scope="col">Occupation</th>
+            <th scope="col">Address</th>
+            <th scope="col">Phone No</th>
+            <th scope="col">Can be used for</th>                
+        </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let entry of viewStaffEntryResult">
+        <td>{{entry.id}}</td>
+        <td>{{entry.standard}}</td>
+        <td>{{entry.subject}}</td>
+        <td>{{entry.staffName}}</td>
+        <td>{{entry.occupation}}</td>
+        <td>{{entry.address}}</td>
+        <td>{{entry.phoneNo}}</td>
+        <td>{{entry.canbeUsedFor}}</td>    
+                   
+    </tr>
+    
+    </tbody>
+    
+        </table>
+    </div>
+
+    <div class="list" *ngIf="data.report==='Remuneration'  &&((data.remuFilter==='pymtStatus'
+    && (data.pymtStatus==='Nil Paid' || data.pymtStatus==='NilPart Paid'))
+    || (data.remuFilter==='others'))">
+    <table class="table table-bordered table-dark">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Creation Date</th>
+            <th scope="col">Standard</th>
+            <th scope="col">Subject</th>
+            <th scope="col">Staff Name</th>
+            <th scope="col">Alloted Task</th>
+            <th scope="col">Expected Completion Date</th>
+            <th scope="col">Task Status</th>
+            <th scope="col">Actual Completed Date</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Payment Status</th>
+            <th scope="col">Remarks</th>                
+        </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let entry of viewWorkAlotResult">
+        <td>{{entry.id}}</td>
+        <td>{{entry.crDateString}}</td>
+        <td>{{entry.standard}}</td>
+        <td>{{entry.subject}}</td>
+        <td>{{entry.staffName}}</td>
+        <td>{{entry.taskAlloted}}</td>
+        <td>{{entry.expDateString}}</td>
+        <td>{{entry.taskStatus}}</td>
+        <td>{{entry.actCompDateString}}</td>
+        <td>{{entry.amount}}</td>
+        <td>{{entry.pymtStatus}}</td>
+        <td>{{entry.remarks}}</td>    
+                   
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>       
+        <td></td> 
+        <td>Sum of Amount</td>
+        <td *ngIf="viewWorkAlotResult.length>0">{{viewWorkAlotResult[0].sumAmt}}</td>
+    </tr>
+    </tbody>
+    
+        </table>
+    </div>
+
+    <div class="list" *ngIf="data.report==='Remuneration'  && data.remuFilter==='pymtStatus'
+    && (data.pymtStatus==='Fully Paid' || data.pymtStatus==='Partially Paid')">
+    <table class="table table-bordered table-dark">
+    <thead> 
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Payment Date</th>
+            <th scope="col">Staff and Subject</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Payment Mode</th>
+            <th scope="col">Payment Status</th>
+            <th scope="col">Work Codes</th>                
+            <th scope="col">Remarks</th>                
+        </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let entry of viewRemuResult">
+        <td>{{entry.id}}</td>
+        <td>{{entry.pymtDateString}}</td>
+        <td>{{entry.staffSubj}}</td>
+        <td>{{entry.amount}}</td>
+        <td>{{entry.pymtMode}}</td>
+        <td>{{entry.pymtStatus}}</td>
+        <td>{{entry.workCodes}}</td>       
+        <td>{{entry.remarks}}</td>    
+                    
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td>Sum of Amount</td>
+        <td *ngIf="viewRemuResult.length>0">{{viewRemuResult[0].sumAmt}}</td>
+    </tr>
+    </tbody>
+    
+        </table>
+    </div>
+
+
+
+
+    </div>

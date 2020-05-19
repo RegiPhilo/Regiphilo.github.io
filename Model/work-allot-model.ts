@@ -1,0 +1,19 @@
+export class WorkAllotModel {
+            id:number;
+            crDate:String;
+            standard:String;
+            subject:String;
+            staffName:String;
+            taskAlloted:String;
+            expDate:String;
+            actCompDate:String;
+            remarks:String;
+            action:String;
+            crDateString:String;
+             expDateString:String;
+             actCompDateString:String;
+             taskStatus:String;
+             pymtStatus:String;
+             amount:number;
+             sumAmt:number;
+}

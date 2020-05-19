@@ -1,0 +1,153 @@
+<div class="container">
+    <div class="row" >
+        <div class="col-sm" > 
+            <h3>Enter the Work Allotment in the below form:</h3>
+            
+            </div>
+            </div>
+    <div class="row" >
+        <div class="col-sm">        
+        <form class="form-inline">
+
+            <div>
+                <label for="curDate">Current Date :&nbsp;&nbsp;&nbsp;</label>
+                <input type="date" name="crDate" id="crDate" class="form-control" 
+                [(ngModel)]="data.crDateString">              
+                
+              </div>
+
+        <div>
+            <label for="standard">Standard:</label>&nbsp;&nbsp;&nbsp;
+            <select id="standard" class="form-control" name="standard" [(ngModel)]="data.standard">
+                <option value="">None</option>
+                <option *ngFor="let standard of wrkAltInt.stdList">{{standard}}</option>        
+              </select>&nbsp;&nbsp;&nbsp;
+        </div>
+        <div>
+            <label for="Subject">Subject:</label>&nbsp;&nbsp;&nbsp;
+            <select id="subject" class="form-control" name="subject" [(ngModel)]="data.subject">
+                <option value="">None</option>
+                <option *ngFor="let subject of wrkAltInt.subjectList">{{subject}}</option>        
+              </select>&nbsp;&nbsp;&nbsp;
+        </div>
+        <div>
+            <label for="StaffName">Staff Name:</label>&nbsp;&nbsp;&nbsp;
+            <select id="staffName" class="form-control" name="staffName" [(ngModel)]="data.staffName">
+                <option value="">None</option>
+                <option *ngFor="let staffName of wrkAltInt.staffList">{{staffName}}</option>        
+              </select>&nbsp;&nbsp;&nbsp;
+        </div>
+        <div >
+            <label for="AllotedTask">Alloted Task:</label>&nbsp;&nbsp;&nbsp;
+            <input type="text" class="form-control" placeholder="Enter the task" name="altdTask"
+             [(ngModel)]="data.taskAlloted" >&nbsp;&nbsp;&nbsp;
+        </div>
+        <div >
+            <label for="expDate">Expected Completion Date :&nbsp;&nbsp;&nbsp;</label>
+            <input type="date" name="expDate" id="expDate" class="form-control" 
+            [(ngModel)]="data.expDateString">
+           
+           
+          </div>
+          <div>
+            <label for="taskStatus">Task Status:</label>&nbsp;&nbsp;&nbsp;
+            <select id="taskStatus" class="form-control" name="taskStatus" [(ngModel)]="data.taskStatus">
+                <option value="NotStarted">Not Yet Started</option>
+                <option value="InProgress">InProgress</option>
+               <option value="Completed">Completed</option>      
+              </select>&nbsp;&nbsp;&nbsp;
+        </div>
+          <div >
+            <label for="actCompDate">Actual Task Completed Date:&nbsp;&nbsp;&nbsp;</label>
+            <input type="date" name="actCompDate" id="actCompDate" class="form-control" 
+            [(ngModel)]="data.actCompDateString">
+            <!--<input class="form-control" placeholder="yyyy-mm-dd" name="actCompDate" [(ngModel)]="actCompDate" ngbDatepicker
+              #f="ngbDatepicker">
+            
+              <button class="btn btn-outline-secondary calendar btn-primary" 
+              (click)="f.toggle()" type="button">D</button>&nbsp;&nbsp;&nbsp;-->
+            
+          </div>
+
+          <div >
+            <label for="remarks">Remarks:</label>&nbsp;&nbsp;&nbsp;
+            <input type="text" class="form-control" placeholder="Remarks" name="remarks"
+             [(ngModel)]="data.remarks" >&nbsp;&nbsp;&nbsp;
+        </div>
+
+        <button type="submit" class="btn btn-primary" (click)="saveWorkAllotment()">{{data.action}}</button>
+        &nbsp;&nbsp;&nbsp;
+        <button type="submit" class="btn btn-primary" (click)="clearWorkAllotment()">Clear</button>
+        &nbsp;&nbsp;&nbsp;
+        <span *ngIf="confirmDelete">
+            <span>Are you sure to Delete?</span>
+            <button class="btn btn-danger" (click)="onSelectDelete()">Yes</button>
+            <button class="btn btn-primary" (click)="confirmDelete=false">No</button>
+        </span>
+            <button *ngIf="!confirmDelete" type="button" class="btn btn-danger" (click)="confirmDelete=true" 
+            >Delete</button> 
+              
+        
+        </form>
+    </div>
+    </div>
+    <div class="row" >
+            
+
+       <!-- <div class="list">
+            <table class="table table-bordered table-dark">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Creation Date</th>
+                <th scope="col">Standard</th>
+                <th scope="col">Subject</th>
+                <th scope="col">Staff Name</th>
+                <th scope="col">Alloted Task</th>
+                <th scope="col">Expected Completion Date</th>
+                <th scope="col">Task Status</th>
+                <th scope="col">Actual Completed Date</th>
+                <th scope="col">Payment Status</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Remarks</th>                
+            </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let entry of entryData">
+            <td>{{entry.id}}</td>
+            <td>{{entry.crDateString}}</td>
+            <td>{{entry.standard}}</td>
+            <td>{{entry.subject}}</td>
+            <td>{{entry.staffName}}</td>
+            <td>{{entry.taskAlloted}}</td>
+            <td>{{entry.expDateString}}</td>
+            <td>{{entry.taskStatus}}</td>
+            <td>{{entry.actCompDateString}}</td>            
+            <td>{{entry.pymtStatus}}</td>
+            <td>{{entry.amount}}</td>
+            <td>{{entry.remarks}}</td>    
+            <button type="button" class="btn btn-primary" (click)="onSelectEdit(entry)"class="glyphicon glyphicon-check">Select</button> 
+                       
+        </tr>
+        
+        </tbody>
+        
+            </table>
+        </div>-->
+
+
+        <ag-grid-angular
+        #agGrid
+            style="width: 1200px; height: 300px;"
+            class="ag-theme-alpine-dark"
+            [rowData]="entryData"
+            [columnDefs]="columnDefs"            
+            (click)="getFilteredRows()"
+            >
+        </ag-grid-angular>
+        <label><b>Sum Amount : </b> &nbsp;&nbsp;&nbsp;</label>
+        <input text="number" name="sumAmt" [value]="entryData[0].sumAmt" style="font-size:18px;font:bold;width:120px;">
+        <label for="remarks"><b>Export Grid to Excel :</b></label>&nbsp;&nbsp;&nbsp;  
+        <button (click)="exportAsXLSX()"><i class="fa fa-file-excel-o" style="font-size:30px;color:darkolivegreen"></i></button>
+       
+    </div>

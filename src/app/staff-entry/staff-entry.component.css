@@ -1,0 +1,16 @@
+.container{
+    border-style: solid;
+    background-color: lightskyblue;
+}
+.col-3{
+    border: 5px;
+    border-style: solid;
+}
+.col{
+    border: 5px;
+    border-style: solid;
+}
+.row{
+    border: 5px;
+    border-style: solid; 
+}

@@ -1,0 +1,121 @@
+<div class="container">
+    <div class="row" >
+        <div class="col-sm" > 
+            <h3>Enter the Remuneration Details in the below form:</h3>
+            </div>
+            </div>
+    <div class="row" >
+        <div class="col-sm">        
+        <form class="form-inline">
+
+            <div>
+                <label for="pymtDate">Payment Date :&nbsp;&nbsp;&nbsp;</label>
+                <input type="date" name="pymtDate" id="pymtDate" class="form-control" 
+                [(ngModel)]="data.pymtDateString">        
+            </div>
+
+        <div>
+            <label for="staffSubj">Staff and Subject:</label>&nbsp;&nbsp;&nbsp;
+            <select id="staffSubj" class="form-control" name="staffSubj" [(ngModel)]="data.staffSubj">
+                <option value="">None</option>
+                <option *ngFor="let staffSubj of staffSubList">{{staffSubj}}</option>        
+              </select>&nbsp;&nbsp;&nbsp;
+        </div>
+        <div>
+            <label for="Amount">Amount:</label>&nbsp;&nbsp;&nbsp;
+            <input type="text" id="amount" name="amount" [(ngModel)]="data.amount">&nbsp;&nbsp;&nbsp;
+        </div>
+        <div>
+            <label for="pymtMode">Mode of Payment:</label>&nbsp;&nbsp;&nbsp;
+            <select id="pymtMode" class="form-control" name="pymtMode" [(ngModel)]="data.pymtMode">
+                <option value="Cash">Cash</option>
+                <option value="Cheque">Cheque</option>
+                <option value="Bank">Bank</option>                       
+              </select>&nbsp;&nbsp;&nbsp;
+        </div>
+        <div>
+            <label for="pymtStatus">Payment Status:</label>&nbsp;&nbsp;&nbsp;
+            <select id="pymtStatus" class="form-control" name="pymtStatus" [(ngModel)]="data.pymtStatus">
+                <option value="Partially Paid">Partially Paid</option>
+                <option value="Fully Paid">Fully Paid</option>                      
+              </select>&nbsp;&nbsp;&nbsp;
+        </div>
+        <div >
+            <label for="workCode">Work Alloted Codes:</label>&nbsp;&nbsp;&nbsp;
+            <input type="text" class="form-control"  name="workCodes"
+             [(ngModel)]="data.workCodes" >&nbsp;&nbsp;&nbsp;
+        </div>
+       
+        <div >
+            <label for="remarks">Remarks:</label>&nbsp;&nbsp;&nbsp;
+            <input type="text" class="form-control" placeholder="Remarks" name="remarks"
+             [(ngModel)]="data.remarks" >&nbsp;&nbsp;&nbsp;
+        </div>
+
+        <button type="submit" class="btn btn-primary" (click)="saveRemu()">{{data.action}}</button>
+        &nbsp;&nbsp;&nbsp;
+        <button type="submit" class="btn btn-primary" (click)="clearRemu()">Clear</button>
+        &nbsp;&nbsp;&nbsp;
+        <span *ngIf="confirmDelete">
+            <span>Are you sure to Delete?</span>
+            <button class="btn btn-danger" (click)="onSelectDelete()">Yes</button>
+            <button class="btn btn-primary" (click)="confirmDelete=false">No</button>
+        </span>
+            <button *ngIf="!confirmDelete" type="button" class="btn btn-danger" (click)="confirmDelete=true" 
+            >Delete</button> 
+        
+        
+        </form>
+    </div>
+    </div>
+    <div class="row" >
+
+
+       <!-- <div class="list">
+            <table class="table table-bordered table-dark">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Payment Date</th>
+                <th scope="col">Staff and Subject</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Payment Mode</th>
+                <th scope="col">Payment Status</th>
+                <th scope="col">Work Codes</th>                
+                <th scope="col">Remarks</th>                
+            </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let entry of entryData">
+            <td>{{entry.id}}</td>
+            <td>{{entry.pymtDateString}}</td>
+            <td>{{entry.staffSubj}}</td>
+            <td>{{entry.amount}}</td>
+            <td>{{entry.pymtMode}}</td>
+            <td>{{entry.pymtStatus}}</td>
+            <td>{{entry.workCodes}}</td>
+           
+            <td>{{entry.remarks}}</td>    
+            <button type="button" class="btn btn-primary" (click)="onSelectEdit(entry)"class="glyphicon glyphicon-check">Select</button> 
+                       
+        </tr>
+        
+        </tbody>
+        
+            </table>
+        </div>-->
+
+        <ag-grid-angular
+        #agGrid
+            style="width: 1200px; height: 300px;"
+            class="ag-theme-alpine-dark"
+            [rowData]="entryData"
+            [columnDefs]="columnDefs"
+            (click)="getSelectedRows()"
+            >
+        </ag-grid-angular>
+
+
+
+
+    </div>

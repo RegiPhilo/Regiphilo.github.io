@@ -1,0 +1,119 @@
+<div class="container">
+    <div class="row" >
+        <div class="col-sm" > 
+            <h3>Make the Contract Staff Entry in the below form:</h3>
+            </div>
+            </div>
+    <div class="row" >
+        <div class="col-sm">        
+        <form class="form-inline">
+
+        <div >
+            <label for="standard">Standard:</label>
+            <select id="standard" name="standard" [(ngModel)]="data.standard">
+                <option *ngFor="let standard of std">{{standard}}</option>        
+              </select>&nbsp;&nbsp;&nbsp;
+        </div>
+        <div >
+            <label for="Subject">Subject:</label>
+            <input type="text" class="form-control" placeholder="Subject" name="subject" 
+            [(ngModel)]="data.subject" [value]="selectedData.subject">&nbsp;&nbsp;&nbsp;
+        </div>
+        <div >
+            <label for="StaffName">Staff Name:</label>
+            <input type="text" class="form-control" placeholder="StaffName" name="staffName"
+             [(ngModel)]="data.staffName" >&nbsp;&nbsp;&nbsp;
+        </div>
+        <div >
+            <label for="occupation">Occupation:</label>
+            <input type="text" class="form-control" placeholder="Occupation" name="occupation"
+             [(ngModel)]="data.occupation" >&nbsp;&nbsp;&nbsp;
+        </div>
+        <div >
+            <label for="phoneNo">Phone Number:</label>
+            <input type="text" class="form-control" placeholder="PhoneNo" name="phoneNo"
+             [(ngModel)]="data.phoneNo" >&nbsp;&nbsp;&nbsp;
+        </div>
+        <div class="address">
+            <label for="address">Address:</label>
+            <textarea class="form-control" placeholder="Address" name="address"
+             [(ngModel)]="data.address" maxlength="30"></textarea>&nbsp;&nbsp;&nbsp;
+        </div>
+        
+        <div class="usedFor">
+            <label for="canbeUsedFor">Can be used for:</label>
+            <textarea class="form-control"  name="canbeUsedFor"
+             [(ngModel)]="data.canbeUsedFor" ></textarea>&nbsp;&nbsp;&nbsp;
+        </div>
+
+        <div class="remarks">
+            <label for="remarks">Remarks:</label>
+            <textarea class="form-control"  placeholder="Remarks" name="remarks"
+             [(ngModel)]="data.remarks" ></textarea>&nbsp;&nbsp;&nbsp;
+        </div>
+
+        <button type="submit" class="btn btn-primary" (click)="makeStaffEntry()">{{data.action}}</button>
+        &nbsp;&nbsp;&nbsp;
+        <button type="submit" class="btn btn-primary" (click)="clearStaffEntry()">Clear</button>
+        &nbsp;&nbsp;&nbsp;
+        <span *ngIf="confirmDelete">
+            <span>Are you sure to Delete?</span>
+            <button class="btn btn-danger" (click)="onSelectDelete()">Yes</button>
+            <button class="btn btn-primary" (click)="confirmDelete=false">No</button>
+        </span>
+            <button *ngIf="!confirmDelete" type="button" class="btn btn-danger" (click)="confirmDelete=true" 
+            >Delete</button> 
+        
+        
+        </form>
+    </div>
+    </div>
+    <div class="row" >
+
+<!--
+        <div class="list">
+            <table class="table table-bordered table-dark">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Standard</th>
+                <th scope="col">Subject</th>
+                <th scope="col">Staff Name</th>
+                <th scope="col">Occupation</th>
+                <th scope="col">Address</th>
+                <th scope="col">Phone No</th>
+                <th scope="col">Can be used for</th>                
+            </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let entry of entryData">
+            <td>{{entry.id}}</td>
+            <td>{{entry.standard}}</td>
+            <td>{{entry.subject}}</td>
+            <td>{{entry.staffName}}</td>
+            <td>{{entry.occupation}}</td>
+            <td>{{entry.address}}</td>
+            <td>{{entry.phoneNo}}</td>
+            <td>{{entry.canbeUsedFor}}</td>    
+            <button type="button" class="btn btn-primary" (click)="onSelectEdit(entry)"class="glyphicon glyphicon-check">Select</button> 
+                       
+        </tr>
+        
+        </tbody>
+        
+            </table>
+        </div>
+
+
+    -->
+    <ag-grid-angular
+#agGrid
+    style="width: 1200px; height: 300px;"
+    class="ag-theme-alpine-dark"
+    [rowData]="entryData"
+    [columnDefs]="columnDefs"
+    (click)="getSelectedRows()"
+    >
+</ag-grid-angular>
+
+    </div>

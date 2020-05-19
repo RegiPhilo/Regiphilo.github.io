@@ -1,0 +1,19 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.css";
+@import "../node_modules/ag-grid-community/src/styles/ag-grid.scss";
+@import "../node_modules/ag-grid-community/src/styles/ag-theme-alpine-dark/sass/ag-theme-alpine-dark-mixin.scss";
+
+;
+
+.ag-theme-alpine-dark {
+    @include ag-theme-alpine-dark();
+}
+
+.ag-theme-alpine {
+    @include ag-theme-alpine();
+}
+
+.container{
+    border-style: solid;
+    background-color: lightskyblue;
+}

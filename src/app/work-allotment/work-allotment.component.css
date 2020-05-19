@@ -1,0 +1,20 @@
+.calendar{
+    background-color:white; /* Green */
+  border: none;
+  color:white;
+  padding: 7px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+    
+}
+.row{
+  border: 5px;
+  border-style: solid; 
+}
+
+.container {
+  overflow-x: scroll;
+  overflow-y: scroll;
+}
