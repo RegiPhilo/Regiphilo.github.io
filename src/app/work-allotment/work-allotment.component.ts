@@ -25,6 +25,7 @@ export class WorkAllotmentComponent implements OnInit {
   confirmDelete:boolean;
   wrkAltInt:any;
   sumAmt:number;
+  exportData:any;
 
   @ViewChild('agGrid') agGrid: AgGridAngular;
 
@@ -152,12 +153,29 @@ this.sumAmt=0;
 });
   this.sumAmt=abc;
 }
+
+
 exportAsXLSX():void {
-  
-  this.excelService.exportAsExcelFile(this.entryData, 'WorkAllotment');
+    this.excelService.exportAsExcelFile(this.entryData, 'WorkAllotment');
 }
+
 
 clearFilter(){
   this.agGrid.api.setFilterModel(null);
 }
+getParams() {
+  return {
+    
+    columnKeys: true && ['crDateString', 'staffName','subject','standard']
+  };
+}
+
+/*
+exportAsXLSX() {
+  var params = this.getParams();
+  
+  this.agGrid.api.exportDataAsExcel(params);
+}
+*/
+
 }
