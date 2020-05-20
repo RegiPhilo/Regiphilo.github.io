@@ -112,9 +112,16 @@
             [rowData]="entryData"
             [columnDefs]="columnDefs"
             (click)="getSelectedRows()"
+            (filterChanged)="onFilterChanged($event)"
+            (firstDataRendered)="getSumAmt()"
             >
         </ag-grid-angular>
-
+        <label><b>Sum Amount : </b> &nbsp;&nbsp;&nbsp;</label>
+        <input text="number" name="sumAmt" [value]="sumAmt" style="font-size:18px;font:bold;width:120px;">
+        <label for="remarks"><b>Export Grid to Excel :</b></label>&nbsp;&nbsp;&nbsp;  
+        <button (click)="exportAsXLSX()"><i class="fa fa-file-excel-o" style="font-size:30px;color:darkolivegreen"></i></button>&nbsp;&nbsp;&nbsp;
+        <button (click)="clearFilter()" class="btn-outline-secondary"><b>Remove All Filters</b></button>
+       
 
 
 

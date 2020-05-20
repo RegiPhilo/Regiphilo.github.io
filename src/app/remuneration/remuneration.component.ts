@@ -3,6 +3,7 @@ import { RemuModel } from 'Model/remu-model';
 import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
 import { AgGridAngular } from 'ag-grid-angular';
+import { ExcelService } from '../excel.service';
 
 @Component({
   selector: 'app-remuneration',
@@ -20,6 +21,7 @@ export class RemunerationComponent implements OnInit {
   editData:any
   confirmDelete:boolean;
   staffSubList:any;
+  sumAmt:number;
 
  
   columnDefs = [
@@ -34,7 +36,7 @@ export class RemunerationComponent implements OnInit {
 ];
 
   constructor(public apiService:ApiService,
-    public router:Router) { 
+    public router:Router,private excelService:ExcelService) { 
     this.data=new RemuModel();
     this.selectedData=new RemuModel();
     this.confirmDelete=false;
@@ -44,6 +46,7 @@ export class RemunerationComponent implements OnInit {
     this.fetchEntries();
     this.fetchDistinctStaffEntries();
     this.clearRemu();
+    this.sumAmt=0;
    
   }
 
@@ -110,5 +113,40 @@ export class RemunerationComponent implements OnInit {
      this.data.action="Edit";}
     console.log("In sel Row"+this.data);
 }
+
+
+onFilterChanged(event) {  
+  var abc:number=0;
+  this.sumAmt=0;
+    this.agGrid.api.forEachNodeAfterFilter(function(rowNode, index) {
+      console.log('node ' + rowNode.data.amount + ' passes the filter');
+      if(rowNode.data.amount>0){
+      abc=abc+rowNode.data.amount;
+    }
+  });
+    this.sumAmt=abc;
+  }
+  
+  getSumAmt(){
+    var abc:number=0;
+  this.sumAmt=0;
+    this.agGrid.api.forEachNode(function(rowNode, index) {
+      console.log('node ' + rowNode.data.amount + ' passes the filter');
+      if(rowNode.data.amount>0){
+      abc=abc+rowNode.data.amount;
+    }
+  });
+    this.sumAmt=abc;
+  }
+  
+  
+  exportAsXLSX():void {
+      this.excelService.exportAsExcelFile(this.entryData, 'Remuneration');
+  }
+  
+  
+  clearFilter(){
+    this.agGrid.api.setFilterModel(null);
+  }
 
 }
