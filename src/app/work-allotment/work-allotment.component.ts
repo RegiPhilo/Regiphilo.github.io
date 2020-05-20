@@ -24,6 +24,7 @@ export class WorkAllotmentComponent implements OnInit {
   editData:any
   confirmDelete:boolean;
   wrkAltInt:any;
+  sumAmt:number;
 
   @ViewChild('agGrid') agGrid: AgGridAngular;
 
@@ -36,24 +37,25 @@ export class WorkAllotmentComponent implements OnInit {
   }
   
   columnDefs = [
-    {headerName: 'Id', field: 'id', sortable: true, filter: true,checkboxSelection: true},
-    {headerName: 'Alloted Date', field: 'crDateString', sortable: true, filter: true},
-    {headerName: 'Staff Name', field: 'staffName', sortable: true, filter: true},
-    {headerName: 'Subject', field: 'subject', sortable: true, filter: true},
-    {headerName: 'Standard', field: 'standard', sortable: true, filter: true},
-    {headerName: 'Alloted Task', field: 'taskAlloted', sortable: true, filter: true},
-    {headerName: 'Expected Date', field: 'expDateString', sortable: true, filter: true},
-    {headerName: 'Task Status', field: 'taskStatus', sortable: true, filter: true},
-    {headerName: 'Actual Completed Date', field: 'actCompDateString', sortable: true, filter: true},
-    {headerName: 'Payment Status', field: 'pymtStatus', sortable: true, filter: true},
-    {headerName: 'Amount', field: 'amount', sortable: true, filter: true},
-    {headerName: 'Remarks', field: 'remarks', sortable: true, filter: true}
+    {headerName: 'Id', field: 'id', sortable: true, filter: true,checkboxSelection: true,width: 90,minWidth: 50,maxWidth: 150},
+    {headerName: 'Alloted Date', field: 'crDateString', sortable: true, filter: true,width: 140,minWidth: 50,maxWidth: 400},
+    {headerName: 'Staff Name', field: 'staffName', sortable: true, filter: true,width: 140,minWidth: 50,maxWidth: 400},
+    {headerName: 'Subject', field: 'subject', sortable: true, filter: true,width: 110,minWidth: 50,maxWidth: 300},
+    {headerName: 'Standard', field: 'standard', sortable: true, filter: true,width: 150,minWidth: 50,maxWidth: 300},
+    {headerName: 'Alloted Task', field: 'taskAlloted', sortable: true, filter: true,width: 200,minWidth: 50,maxWidth: 400},
+    {headerName: 'Expected Date', field: 'expDateString', sortable: true, filter: true,width: 300,minWidth: 50,maxWidth: 450},
+    {headerName: 'Task Status', field: 'taskStatus', sortable: true, filter: true,width: 200,minWidth: 50,maxWidth: 350},
+    {headerName: 'Actual Completed Date', field: 'actCompDateString', sortable: true, filter: true,width: 450,minWidth: 50,maxWidth: 600},
+    {headerName: 'Payment Status', field: 'pymtStatus', sortable: true, filter: true,width: 200,minWidth: 50,maxWidth: 600},
+    {headerName: 'Amount', field: 'amount', sortable: true, filter: true,width: 150,minWidth: 50,maxWidth: 300},
+    {headerName: 'Remarks', field: 'remarks', sortable: true, filter: true,width: 150,minWidth: 50,maxWidth: 600}
 ];
 
   ngOnInit(): void {
     this.fetchEntries();
     this.fetchDistinctStaffEntries();
     this.clearWorkAllotment();
+    this.sumAmt=0;
    
   }
 
@@ -127,14 +129,35 @@ export class WorkAllotmentComponent implements OnInit {
     console.log("In sel Row"+this.data);
 }
 
-getFilteredRows() {
- // const selectedNodes = this.agGrid.api.
- // console.log(selectedNodes.);
+onFilterChanged(event) {  
+var abc:number=0;
+this.sumAmt=0;
+  this.agGrid.api.forEachNodeAfterFilter(function(rowNode, index) {
+    console.log('node ' + rowNode.data.amount + ' passes the filter');
+    if(rowNode.data.amount>0){
+    abc=abc+rowNode.data.amount;
+  }
+});
+  this.sumAmt=abc;
 }
 
+getSumAmt(){
+  var abc:number=0;
+this.sumAmt=0;
+  this.agGrid.api.forEachNode(function(rowNode, index) {
+    console.log('node ' + rowNode.data.amount + ' passes the filter');
+    if(rowNode.data.amount>0){
+    abc=abc+rowNode.data.amount;
+  }
+});
+  this.sumAmt=abc;
+}
 exportAsXLSX():void {
   
   this.excelService.exportAsExcelFile(this.entryData, 'WorkAllotment');
 }
 
+clearFilter(){
+  this.agGrid.api.setFilterModel(null);
+}
 }
