@@ -4,6 +4,9 @@ import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ExcelService } from '../excel.service';
+import { WorkAllotModel } from 'Model/work-allot-model';
+
+
 
 @Component({
   selector: 'app-remuneration',
@@ -22,18 +25,29 @@ export class RemunerationComponent implements OnInit {
   confirmDelete:boolean;
   staffSubList:any;
   sumAmt:number;
+  workCodesRes:any;
+  workCodes:any;
+  stfNamechosen:boolean;
+  selData:any[];
+
+  
+  public settings = {};
+  public selectedItems = [];
+  public workCodedata = [];
+
 
  
   columnDefs = [
-    {headerName: 'Id', field: 'id', sortable: true, filter: true,checkboxSelection: true},
-    {headerName: 'Payment Date', field: 'pymtDateString', sortable: true, filter: true},
-    {headerName: 'Staff and Subject', field: 'staffSubj', sortable: true, filter: true},
-    {headerName: 'Amount', field: 'amount', sortable: true, filter: true},
-    {headerName: 'Payment Mode', field: 'pymtMode', sortable: true, filter: true},
-    {headerName: 'Payment Status', field: 'pymtStatus', sortable: true, filter: true},
-    {headerName: 'Work Codes', field: 'workCodes', sortable: true, filter: true},
-    {headerName: 'Remarks', field: 'remarks', sortable: true, filter: true}
+    {headerName: 'Id', field: 'id', sortable: true, filter: true,checkboxSelection: true,width: 80,minWidth: 50,maxWidth: 150,resizable:true},
+    {headerName: 'Payment Date', field: 'pymtDateString', sortable: true, filter: true,width: 150,minWidth: 50,maxWidth: 200,resizable:true},
+    {headerName: 'Staff and Subject', field: 'staffSubj', sortable: true, filter: true,width: 180,minWidth: 50,maxWidth: 300,resizable:true},
+    {headerName: 'Amount', field: 'amount', sortable: true, filter: true,width: 110,minWidth: 50,maxWidth: 150,resizable:true},
+    {headerName: 'Payment Mode', field: 'pymtMode', sortable: true, filter: true,width: 150,minWidth: 50,maxWidth: 300,resizable:true},
+    {headerName: 'Payment Status', field: 'pymtStatus', sortable: true, filter: true,width: 150,minWidth: 50,maxWidth: 300,resizable:true},
+    {headerName: 'Work Codes', field: 'workAllotCodes', sortable: true, filter: true,width: 150,minWidth: 50,maxWidth: 300,resizable:true},
+    {headerName: 'Remarks', field: 'remarks', sortable: true, filter: true,width: 120,minWidth: 50,maxWidth: 150,resizable:true}
 ];
+
 
   constructor(public apiService:ApiService,
     public router:Router,private excelService:ExcelService) { 
@@ -47,13 +61,51 @@ export class RemunerationComponent implements OnInit {
     this.fetchDistinctStaffEntries();
     this.clearRemu();
     this.sumAmt=0;
+    this.stfNamechosen=false;
+
+    // setting and support i18n
+   
    
   }
 
+fetchWorkCodes(event){
+  console.log("EventMethod");
+  this.workCodesRes=""; 
+  this.stfNamechosen=false;
+  console.log("StaffSub in workCodeFetch"+this.data.staffSubj);
+  var sfName=event.target.value;
+  if(sfName!=null && sfName!=undefined && sfName.length>0){
+    this.stfNamechosen=true;
+  this.apiService.viewWorkCodes(event.target.value).subscribe((response) => {
+     console.log(response);
+     this.workCodesRes=response;      
+     //this.allWorkCodes();
+   });
+   }
+   
+  }
+
+  fetchEditWorkCodes(staffName:String){
+    console.log("EditMethod");
+  this.workCodesRes=""; 
+  this.stfNamechosen=false;
+  console.log("StaffSub in workCodeFetch"+staffName);
+  if(staffName!=null && staffName!=undefined && staffName.length>0 && staffName!='undefined~undefined'){
+   
+    this.stfNamechosen=true;
+      this.apiService.viewWorkCodes(staffName).subscribe((response) => {
+     console.log(response);
+     this.workCodesRes=response;  
+    }); 
+  }
+     }
+
+  
   saveRemu(){
 
     this.saveResult="";
       this.data.pymtDate=this.data.pymtDateString;
+      console.log(this.data.workCodes)
     this.apiService.saveRemu(this.data).subscribe((response) => {
         console.log(response);
         this.saveResult=response;
@@ -62,6 +114,7 @@ export class RemunerationComponent implements OnInit {
       
       alert("Success! Entry Saved");
       this.fetchEntries();
+      this.stfNamechosen=false;
   }
 
   fetchEntries(){
@@ -83,18 +136,24 @@ export class RemunerationComponent implements OnInit {
 
   clearRemu(){
     this.data=new RemuModel();    
-    this.data.action="Save";    
+    this.data.action="Save"; 
+    //this.fetchEditWorkCodes(this.data.staffSubj); 
+    this.stfNamechosen=false;  
+    this.workCodesRes=""; 
+    this.selData=null;
+
     
   }
   onSelectEdit(selectedData){
     selectedData.action="Edit";
     this.data=selectedData;
       console.log(selectedData);
+     // this.fetchEditWorkCodes(this.data.staffSubj);
   }
   onSelectDelete(){
     this.saveResult="";
      
-      this.apiService.deleteWorkAlot(this.data.id).subscribe(
+      this.apiService.deleteRemu(this.data.id).subscribe(
         ()=>console.log(`Entry with id =${this.data.id} deleted`),
         (err)=>console.log(err)
       );
@@ -103,6 +162,8 @@ export class RemunerationComponent implements OnInit {
       this.confirmDelete=false;
       this.clearRemu();
       this.fetchEntries();
+      this.getSumAmt();
+      this.stfNamechosen=false;
   }
 
   getSelectedRows() {
@@ -111,8 +172,11 @@ export class RemunerationComponent implements OnInit {
      selectedData.map( node => this.data=node);
      if(this.data.id>0){
      this.data.action="Edit";}
+     this.selData=this.data.workAllotCodes;
+     this.fetchEditWorkCodes(this.data.staffSubj+"~"+this.data.id);
     console.log("In sel Row"+this.data);
 }
+
 
 
 onFilterChanged(event) {  
@@ -149,4 +213,5 @@ onFilterChanged(event) {
     this.agGrid.api.setFilterModel(null);
   }
 
+  
 }

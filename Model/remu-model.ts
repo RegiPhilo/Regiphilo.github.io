@@ -11,4 +11,9 @@ remarks:String;
 id:number;
 action:String;
 sumAmt:number;
+staffNameForWorkCode:String;
+subjectForWorkCode:String;
+//workAllotCodes:number[];
+workAllotCodes:string[];
+
 }

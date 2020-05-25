@@ -3,6 +3,7 @@ import { StaffEntryModel } from 'Model/staff-entry-model';
 import {ApiService} from '../api.service';
 import { Router } from '@angular/router';
 import { AgGridAngular } from 'ag-grid-angular';
+import { ExcelService } from '../excel.service';
 
 @Component({
   selector: 'app-staff-entry',
@@ -18,23 +19,25 @@ export class StaffEntryComponent implements OnInit {
   selectedData:any;
   editData:any
   confirmDelete:boolean;
+  staffCnt:number;
+  exportData:any;
   
   @ViewChild('agGrid') agGrid: AgGridAngular;
   
   columnDefs = [
-    {headerName: 'StaffId', field: 'staffId', sortable: true, filter: true,checkboxSelection: true},
-    {headerName: 'StaffName', field: 'staffName', sortable: true, filter: true},
-    {headerName: 'Standard', field: 'standard', sortable: true, filter: true},
-    {headerName: 'Subject', field: 'subject', sortable: true, filter: true},
-    {headerName: 'Occupation', field: 'occupation', sortable: true, filter: true},
-    {headerName: 'Phone Number', field: 'phoneNo', sortable: true, filter: true},
-    {headerName: 'Address', field: 'address', sortable: true, filter: true},
-    {headerName: 'Can be used for', field: 'canbeUsedFor', sortable: true, filter: true},
-    {headerName: 'Remarks', field: 'remarks', sortable: true, filter: true}
+    {headerName: 'StaffId', field: 'staffId', sortable: true, filter: true,checkboxSelection: true,width: 100,minWidth: 50,maxWidth: 150,resizable:true},
+    {headerName: 'StaffName', field: 'staffName', sortable: true, filter: true,width: 120,minWidth: 50,maxWidth: 150,resizable:true},
+    {headerName: 'Standard', field: 'standard', sortable: true, filter: true,width: 110,minWidth: 50,maxWidth: 150,resizable:true},
+    {headerName: 'Subject', field: 'subject', sortable: true, filter: true,width: 110,minWidth: 50,maxWidth: 150,resizable:true},
+    {headerName: 'Occupation', field: 'occupation', sortable: true, filter: true,width: 140,minWidth: 50,maxWidth: 150,resizable:true},
+    {headerName: 'Phone Number', field: 'phoneNo', sortable: true, filter: true,width: 150,minWidth: 50,maxWidth: 150,resizable:true},
+    {headerName: 'Address', field: 'address', sortable: true, filter: true,width: 120,minWidth: 50,maxWidth: 300,resizable:true},
+    {headerName: 'Can be used for', field: 'canbeUsedFor', sortable: true, filter: true,width: 170,minWidth: 50,maxWidth: 300,resizable:true},
+    {headerName: 'Remarks', field: 'remarks', sortable: true, filter: true,width: 120,minWidth: 50,maxWidth: 500,resizable:true}
 ];
 
   constructor(public apiService:ApiService,
-    public router:Router) {
+    public router:Router,private excelService:ExcelService) {
     this.std=['1','2','3','4','5','6','7','8','9','10','11','12','G'];
     this.data=new StaffEntryModel();
     this.selectedData=new StaffEntryModel();
@@ -44,7 +47,7 @@ export class StaffEntryComponent implements OnInit {
   ngOnInit(): void {
     this.fetchEntries();
     this.data.action="Save";
-    
+    this.staffCnt=0;
   }
 
   
@@ -90,6 +93,7 @@ export class StaffEntryComponent implements OnInit {
       this.confirmDelete=false;
       this.clearStaffEntry();
       this.fetchEntries();
+      this.getStaffCnt();
   }
 
   getSelectedRows() {
@@ -100,4 +104,24 @@ export class StaffEntryComponent implements OnInit {
      this.data.action="Edit";}
     console.log("In sel Row"+this.data);
 }
+
+onFilterChanged(event) {  
+  this.staffCnt=0;    
+  this.staffCnt=this.agGrid.api.getDisplayedRowCount();   
+  }
+  
+  getStaffCnt(){
+    this.staffCnt=0;   
+    this.staffCnt=this.agGrid.api.getDisplayedRowCount();  
+  }
+  
+  
+  exportAsXLSX():void {
+      this.excelService.exportAsExcelFile(this.entryData, 'StaffEntry');
+  }
+  
+  
+  clearFilter(){
+    this.agGrid.api.setFilterModel(null);
+  }
 }

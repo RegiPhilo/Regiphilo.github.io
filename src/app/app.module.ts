@@ -16,6 +16,7 @@ import { WorkAlotReportComponent } from './work-alot-report/work-alot-report.com
 import { ReminderComponent } from './reminder/reminder.component';
 import { AgGridModule } from 'ag-grid-angular';
 import { ExcelService } from './excel.service';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { ExcelService } from './excel.service';
     RemunerationComponent,
     WorkAlotReportComponent,
     ReminderComponent
+    
   ],
   imports: [
     BrowserModule,
@@ -35,7 +37,8 @@ import { ExcelService } from './excel.service';
     HttpClientModule,
     BsDatepickerModule.forRoot(),
     AppRoutingModule,
-    AgGridModule.withComponents([])
+    AgGridModule.withComponents([]),
+    NgMultiSelectDropDownModule
   ],
   providers: [ApiService,ExcelService],
   bootstrap: [AppComponent],

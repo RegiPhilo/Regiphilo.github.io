@@ -16,12 +16,24 @@
 
         <div>
             <label for="staffSubj">Staff and Subject:</label>&nbsp;&nbsp;&nbsp;
-            <select id="staffSubj" class="form-control" name="staffSubj" [(ngModel)]="data.staffSubj">
+            <select id="staffSubj" class="form-control" name="staffSubj"
+             [(ngModel)]="data.staffSubj"  (change)='fetchWorkCodes($event)' >
                 <option value="">None</option>
-                <option *ngFor="let staffSubj of staffSubList">{{staffSubj}}</option>        
+                <option *ngFor="let staffSubj of staffSubList" >{{staffSubj}}</option>        
               </select>&nbsp;&nbsp;&nbsp;
         </div>
-        <div>
+        
+       
+        <div *ngIf="(stfNamechosen ||  (data.staffSubj!=undefined && data.staffSubj.length>0))">
+            <label for="workCode">Work Alloted Codes:</label>&nbsp;&nbsp;&nbsp;
+            <select id="wrkcode" name="wrkcode" multiple [(ngModel)]="data.workAllotCodes" >
+                <option name="wrkCode1" *ngFor="let entry of selData" value={{entry}} selected >{{entry}}</option>           
+                <option name="wrkCode2" *ngFor="let entry of workCodesRes" value={{entry.id}}#{{entry.taskAlloted}} >{{entry.id}}#{{entry.taskAlloted}}</option>               
+              </select>
+            </div> 
+                      
+
+              <div>
             <label for="Amount">Amount:</label>&nbsp;&nbsp;&nbsp;
             <input type="text" id="amount" name="amount" [(ngModel)]="data.amount">&nbsp;&nbsp;&nbsp;
         </div>
@@ -40,11 +52,16 @@
                 <option value="Fully Paid">Fully Paid</option>                      
               </select>&nbsp;&nbsp;&nbsp;
         </div>
-        <div >
+
+     
+
+    
+       
+       <!-- <div >
             <label for="workCode">Work Alloted Codes:</label>&nbsp;&nbsp;&nbsp;
             <input type="text" class="form-control"  name="workCodes"
              [(ngModel)]="data.workCodes" >&nbsp;&nbsp;&nbsp;
-        </div>
+        </div>-->
        
         <div >
             <label for="remarks">Remarks:</label>&nbsp;&nbsp;&nbsp;
@@ -54,7 +71,7 @@
 
         <button type="submit" class="btn btn-primary" (click)="saveRemu()">{{data.action}}</button>
         &nbsp;&nbsp;&nbsp;
-        <button type="submit" class="btn btn-primary" (click)="clearRemu()">Clear</button>
+        <button type="submit" id="clear" name="clear" class="btn btn-primary" (click)="clearRemu()">Clear</button>
         &nbsp;&nbsp;&nbsp;
         <span *ngIf="confirmDelete">
             <span>Are you sure to Delete?</span>
@@ -114,6 +131,7 @@
             (click)="getSelectedRows()"
             (filterChanged)="onFilterChanged($event)"
             (firstDataRendered)="getSumAmt()"
+            (rowDataChanged)="getSumAmt()"
             >
         </ag-grid-angular>
         <label><b>Sum Amount : </b> &nbsp;&nbsp;&nbsp;</label>

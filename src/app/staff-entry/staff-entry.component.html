@@ -7,51 +7,53 @@
     <div class="row" >
         <div class="col-sm">        
         <form class="form-inline">
+            <div >
+                <label for="StaffName">Staff Name :</label>
+                <input type="text" class="form-control" placeholder="StaffName" name="staffName"
+                 [(ngModel)]="data.staffName" >&nbsp;&nbsp;&nbsp;
+            </div>
 
         <div >
-            <label for="standard">Standard:</label>
+            <label for="standard">Standard :</label>
             <select id="standard" name="standard" [(ngModel)]="data.standard">
                 <option *ngFor="let standard of std">{{standard}}</option>        
               </select>&nbsp;&nbsp;&nbsp;
         </div>
         <div >
-            <label for="Subject">Subject:</label>
+            <label for="Subject">Subject :</label>
             <input type="text" class="form-control" placeholder="Subject" name="subject" 
             [(ngModel)]="data.subject" [value]="selectedData.subject">&nbsp;&nbsp;&nbsp;
         </div>
+        
         <div >
-            <label for="StaffName">Staff Name:</label>
-            <input type="text" class="form-control" placeholder="StaffName" name="staffName"
-             [(ngModel)]="data.staffName" >&nbsp;&nbsp;&nbsp;
-        </div>
-        <div >
-            <label for="occupation">Occupation:</label>
+            <label for="occupation">Occupation :</label>
             <input type="text" class="form-control" placeholder="Occupation" name="occupation"
              [(ngModel)]="data.occupation" >&nbsp;&nbsp;&nbsp;
         </div>
         <div >
-            <label for="phoneNo">Phone Number:</label>
+            <label for="phoneNo">Phone Number :</label>
             <input type="text" class="form-control" placeholder="PhoneNo" name="phoneNo"
              [(ngModel)]="data.phoneNo" >&nbsp;&nbsp;&nbsp;
         </div>
         <div class="address">
-            <label for="address">Address:</label>
+            <label for="address">Address :</label>
             <textarea class="form-control" placeholder="Address" name="address"
              [(ngModel)]="data.address" maxlength="30"></textarea>&nbsp;&nbsp;&nbsp;
         </div>
         
         <div class="usedFor">
-            <label for="canbeUsedFor">Can be used for:</label>
+            <label for="canbeUsedFor">Can be used for :</label>
             <textarea class="form-control"  name="canbeUsedFor"
              [(ngModel)]="data.canbeUsedFor" ></textarea>&nbsp;&nbsp;&nbsp;
         </div>
 
         <div class="remarks">
-            <label for="remarks">Remarks:</label>
+            <label for="remarks">Remarks :</label>
             <textarea class="form-control"  placeholder="Remarks" name="remarks"
              [(ngModel)]="data.remarks" ></textarea>&nbsp;&nbsp;&nbsp;
         </div>
 
+        <div class="buttonfamily">
         <button type="submit" class="btn btn-primary" (click)="makeStaffEntry()">{{data.action}}</button>
         &nbsp;&nbsp;&nbsp;
         <button type="submit" class="btn btn-primary" (click)="clearStaffEntry()">Clear</button>
@@ -63,7 +65,7 @@
         </span>
             <button *ngIf="!confirmDelete" type="button" class="btn btn-danger" (click)="confirmDelete=true" 
             >Delete</button> 
-        
+    </div>
         
         </form>
     </div>
@@ -113,7 +115,16 @@
     [rowData]="entryData"
     [columnDefs]="columnDefs"
     (click)="getSelectedRows()"
+    (filterChanged)="onFilterChanged($event)"
+    (firstDataRendered)="getStaffCnt()"
+    (rowDataChanged)="getStaffCnt()"
     >
 </ag-grid-angular>
+<label><b>Row Count : </b> &nbsp;&nbsp;&nbsp;</label>
+<input text="number" name="staffCnt" [value]="staffCnt" style="font-size:18px;font:bold;width:120px;">
+<label for="exp"><b>Export Grid to Excel :</b></label>&nbsp;&nbsp;&nbsp;  
+<button (click)="exportAsXLSX()"><i class="fa fa-file-excel-o" style="font-size:30px;color:darkolivegreen"></i></button>&nbsp;&nbsp;&nbsp;
+<button (click)="clearFilter()" class="btn-outline-secondary"><b>Remove All Filters</b></button>
+
 
     </div>

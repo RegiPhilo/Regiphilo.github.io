@@ -8,12 +8,22 @@ export class ExcelService {
 constructor() { }
 public exportAsExcelFile(json: any[], excelFileName: string): void {
 
-  Object.keys(json).forEach(key => {
-    if (key == 'id' || key == 'staffName' || key == '03') {
-      delete json[key];
-    }
-  });
+if(excelFileName==='WorkAllotment')
+  for(let v of json){
+    delete v['crDate'];
+    delete v['actCompDate'];
+    delete v['expDate'];
+    delete v['sumAmt'];
+  }else if(excelFileName==='Remuneration')
+  for(let v of json){
+    delete v['pymeDate'];    
+  }else if(excelFileName==='StaffEntry')
+  for(let v of json){
+    delete v['action'];    
+  }
 
+  
+  
   const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
   
   const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };

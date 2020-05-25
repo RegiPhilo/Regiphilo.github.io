@@ -15,6 +15,7 @@ import { ReportModel } from 'Model/report-model';
   providedIn: 'root'
 })
 export class ApiService {
+ 
 
   constructor(private http:HttpClient) { }
 
@@ -58,6 +59,14 @@ saveRemu(item):Observable<RemuModel>{
 saveWorkAlot(item):Observable<WorkAllotModel>{
   return this.http
   .post<WorkAllotModel>("http://localhost:8080/api/work/saveWrkAlotmnt",JSON.stringify(item),this.HttpOptions)
+  .pipe(
+    retry(2),catchError(this.handleError)
+  )
+}
+
+viewWorkCodes(item):Observable<WorkAllotModel>{
+  return this.http
+  .post<WorkAllotModel>("http://localhost:8080/api/work/fetchWorkCodes",JSON.stringify(item),this.HttpOptions)
   .pipe(
     retry(2),catchError(this.handleError)
   )

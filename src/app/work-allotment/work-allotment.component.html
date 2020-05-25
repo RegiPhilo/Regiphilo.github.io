@@ -52,7 +52,7 @@
           <div>
             <label for="taskStatus">Task Status:</label>&nbsp;&nbsp;&nbsp;
             <select id="taskStatus" class="form-control" name="taskStatus" [(ngModel)]="data.taskStatus">
-                <option value="NotStarted">Not Yet Started</option>
+                <option value="NotStarted" >Not Yet Started</option>
                 <option value="InProgress">InProgress</option>
                <option value="Completed">Completed</option>      
               </select>&nbsp;&nbsp;&nbsp;
@@ -145,11 +145,12 @@
             (click)="getSelectedRows()"
             (filterChanged)="onFilterChanged($event)"
             (firstDataRendered)="getSumAmt()"
+            (rowDataChanged)="getSumAmt()"
             >
         </ag-grid-angular>
         <label><b>Sum Amount : </b> &nbsp;&nbsp;&nbsp;</label>
         <input text="number" name="sumAmt" [value]="sumAmt" style="font-size:18px;font:bold;width:120px;">
-        <label for="remarks"><b>Export Grid to Excel :</b></label>&nbsp;&nbsp;&nbsp;  
+        <label for="exp"><b>Export Grid to Excel :</b></label>&nbsp;&nbsp;&nbsp;  
         <button (click)="exportAsXLSX()"><i class="fa fa-file-excel-o" style="font-size:30px;color:darkolivegreen"></i></button>&nbsp;&nbsp;&nbsp;
         <button (click)="clearFilter()" class="btn-outline-secondary"><b>Remove All Filters</b></button>
        

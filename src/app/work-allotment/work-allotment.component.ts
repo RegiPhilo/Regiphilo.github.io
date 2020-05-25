@@ -38,18 +38,18 @@ export class WorkAllotmentComponent implements OnInit {
   }
   
   columnDefs = [
-    {headerName: 'Id', field: 'id', sortable: true, filter: true,checkboxSelection: true,width: 90,minWidth: 50,maxWidth: 150},
-    {headerName: 'Alloted Date', field: 'crDateString', sortable: true, filter: true,width: 140,minWidth: 50,maxWidth: 400},
-    {headerName: 'Staff Name', field: 'staffName', sortable: true, filter: true,width: 140,minWidth: 50,maxWidth: 400},
-    {headerName: 'Subject', field: 'subject', sortable: true, filter: true,width: 110,minWidth: 50,maxWidth: 300},
-    {headerName: 'Standard', field: 'standard', sortable: true, filter: true,width: 150,minWidth: 50,maxWidth: 300},
-    {headerName: 'Alloted Task', field: 'taskAlloted', sortable: true, filter: true,width: 200,minWidth: 50,maxWidth: 400},
-    {headerName: 'Expected Date', field: 'expDateString', sortable: true, filter: true,width: 300,minWidth: 50,maxWidth: 450},
-    {headerName: 'Task Status', field: 'taskStatus', sortable: true, filter: true,width: 200,minWidth: 50,maxWidth: 350},
-    {headerName: 'Actual Completed Date', field: 'actCompDateString', sortable: true, filter: true,width: 450,minWidth: 50,maxWidth: 600},
-    {headerName: 'Payment Status', field: 'pymtStatus', sortable: true, filter: true,width: 200,minWidth: 50,maxWidth: 600},
-    {headerName: 'Amount', field: 'amount', sortable: true, filter: true,width: 150,minWidth: 50,maxWidth: 300},
-    {headerName: 'Remarks', field: 'remarks', sortable: true, filter: true,width: 150,minWidth: 50,maxWidth: 600}
+    {headerName: 'Id', field: 'id', sortable: true, filter: true,checkboxSelection: true,width: 90,minWidth: 50,maxWidth: 150,resizable:true},
+    {headerName: 'Alloted Date', field: 'crDateString', sortable: true, filter: true,width: 130,minWidth: 50,maxWidth: 400,resizable:true},
+    {headerName: 'Staff Name', field: 'staffName', sortable: true, filter: true,width: 130,minWidth: 50,maxWidth: 400,resizable:true},
+    {headerName: 'Subject', field: 'subject', sortable: true, filter: true,width: 110,minWidth: 50,maxWidth: 300,resizable:true},
+    {headerName: 'Standard', field: 'standard', sortable: true, filter: true,width: 110,minWidth: 50,maxWidth: 300,resizable:true},
+    {headerName: 'Alloted Task', field: 'taskAlloted', sortable: true, filter: true,width: 130,minWidth: 50,maxWidth: 400,resizable:true},
+    {headerName: 'Expected Date', field: 'expDateString', sortable: true, filter: true,width: 160,minWidth: 50,maxWidth: 450,resizable:true},
+    {headerName: 'Task Status', field: 'taskStatus', sortable: true, filter: true,width: 130,minWidth: 50,maxWidth: 350,resizable:true},
+    {headerName: 'Actual Completed Date', field: 'actCompDateString', sortable: true, filter: true,width: 200,minWidth: 50,maxWidth: 600,resizable:true},
+    {headerName: 'Payment Status', field: 'pymtStatus', sortable: true, filter: true,width: 150,minWidth: 50,maxWidth: 600,resizable:true},
+    {headerName: 'Amount', field: 'amount', sortable: true, filter: true,width: 110,minWidth: 50,maxWidth: 300,resizable:true},
+    {headerName: 'Remarks', field: 'remarks', sortable: true, filter: true,width: 110,minWidth: 50,maxWidth: 600,resizable:true}
 ];
 
   ngOnInit(): void {
@@ -66,9 +66,11 @@ export class WorkAllotmentComponent implements OnInit {
     this.data.crDate=this.data.crDateString;
     this.data.expDate=this.data.expDateString;
     this.data.actCompDate=this.data.actCompDateString;
-
-    console.log(this.data.standard);
-         
+    console.log(this.data.taskStatus);
+    if(this.data.taskStatus===undefined || this.data.taskStatus==='' || this.data.taskStatus===null ){
+      this.data.taskStatus='Not Yet Started'
+    }
+        
      this.apiService.saveWorkAlot(this.data).subscribe((response) => {
         console.log(response);
         this.saveResult=response;
@@ -119,6 +121,7 @@ export class WorkAllotmentComponent implements OnInit {
       this.confirmDelete=false;
       this.clearWorkAllotment();
       this.fetchEntries();
+      this.getSumAmt();
   }
 
   getSelectedRows() {
@@ -163,19 +166,7 @@ exportAsXLSX():void {
 clearFilter(){
   this.agGrid.api.setFilterModel(null);
 }
-getParams() {
-  return {
-    
-    columnKeys: true && ['crDateString', 'staffName','subject','standard']
-  };
-}
 
-/*
-exportAsXLSX() {
-  var params = this.getParams();
-  
-  this.agGrid.api.exportDataAsExcel(params);
-}
-*/
+
 
 }
