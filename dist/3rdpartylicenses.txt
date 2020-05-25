@@ -266,8 +266,6 @@ SOFTWARE.
 
 
 
-ngx-bootstrap/datepicker
-
 regenerator-runtime
 MIT
 MIT License
